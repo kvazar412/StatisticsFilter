@@ -11,18 +11,16 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
 public class StatsFilter implements Filter {
-    private VisitCountServiceImpl visitCountService;
 
     public void init(FilterConfig fConfig) throws ServletException {
-        visitCountService = new VisitCountServiceImpl();
         Timer timer = new Timer();
-        timer.schedule(new HourlyTask(), 60 * 60000, 60 * 60000);
+        timer.scheduleAtFixedRate(new HourlyTask(), VisitCountServiceHelper.getFirstTimeDate(), 60 * 60000);
     }
 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        visitCountService.registerVisit();
+        VisitCountServiceImpl.INSTANCE.registerVisit();
 
-        request.setAttribute("dailyVisits", visitCountService.getDailyVisits());
+        request.setAttribute("dailyVisits", VisitCountServiceImpl.INSTANCE.getDailyVisits());
         chain.doFilter(request, response);
     }
 

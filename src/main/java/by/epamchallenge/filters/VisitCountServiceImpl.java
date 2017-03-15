@@ -6,8 +6,10 @@ import java.util.List;
 
 import by.epamchallenge.filters.interfaces.VisitCountService;
 
-public class VisitCountServiceImpl implements VisitCountService {
-    private static int[] dailyVisits = new int[24];
+public enum VisitCountServiceImpl implements VisitCountService {
+    INSTANCE;
+
+    private int[] dailyVisits = new int[24];
 
     public synchronized void registerVisit() {
         dailyVisits[0]++;
